@@ -19,8 +19,12 @@ screen_off_charge_rates = []
 def mean(numbers):
     return round(float(sum(numbers)) / max(len(numbers), 1), 2)
 
+try:
+    f = open('battery_history.csv', newline='')
+except IOError:
+    f = open('/home/brian/Downloads/battery_history.csv', newline='')
 
-with open('/home/brian/Downloads/battery_history.csv', newline='') as f:
+with f:
     reader = csv.reader(f, delimiter=',')
     for row in reader:
         if now_capacity is None:
@@ -69,12 +73,15 @@ with open('/home/brian/Downloads/battery_history.csv', newline='') as f:
         prev_row = row
         now_capacity = row[2]
 
+screen_on_discharge_rate = mean(screen_on_discharge_rates)
+screen_off_discharge_rate = mean(screen_off_discharge_rates)
+
 print('Cycles:', charge_cycles, discharge_cycles)
 print('Times charged to 100%:', charging_to_100_times)
 print('On percentage:', round(ons * 100 / (ons + offs), 2))
-print('Screen on discharge rate:', mean(screen_on_discharge_rates), '%/hr')
-print('Screen off discharge rate:', mean(screen_off_discharge_rates), '%/hr')
+print('Screen on discharge rate:', screen_on_discharge_rate, '%/hr')
+print('Screen off discharge rate:', screen_off_discharge_rate, '%/hr')
 print('Screen on charge rate:', mean(screen_on_charge_rates), '%/hr')
 print('Screen off charge rate:', mean(screen_off_charge_rates), '%/hr')
-print('Nominal screen on time:', round(-60 / mean(screen_on_discharge_rates), 0), 'hrs')
-print('Nominal standby time:', round(-60 / mean(screen_off_discharge_rates), 0), 'hrs')
+print('Nominal screen on time:', round(-60 / screen_on_discharge_rate, 0), 'hrs')
+print('Nominal standby time:', round(-60 / screen_off_discharge_rate, 0), 'hrs')
