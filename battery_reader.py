@@ -46,7 +46,6 @@ df['voltage'] = df['voltage'].apply(clean_voltage)
 
 
 dow_buckets = [None] * 7
-tod_buckets = [None] * 24
 data_points = len(df)
 
 between_20_80_times = max(df[
@@ -69,7 +68,7 @@ charging_to_90_times = max(df[
     (df.percent_row_before < 90) & 
     (df.percent >= 90)].count())
 
-average_voltage = int(df[df.voltage > 0].voltage.mean())
+average_voltage = int(df[df.voltage > 0].voltage.mean()) / 1000000
 
 screen_on_df = df[df.display == 'on']
 total_sot_percent = \
@@ -81,17 +80,6 @@ for idx in range(7):
         / max(df[df.weekday == idx].count())
     ) * 100
 
-for idx in range(24):
-    tod_buckets[idx] = (
-        max(screen_on_df[
-            (screen_on_df.hour >= idx) &
-            (screen_on_df.hour < idx + 1)].count())
-        / max(df[
-            (df.hour >= idx) &
-            (df.hour < idx + 1)].count())
-    ) * 100
-
-
 days = (df['date'].max() - df['date'].min()).days
 
 rows = [
@@ -101,9 +89,9 @@ rows = [
     ['Discharge cycles', discharge_cycles, rounded(discharge_cycles / days)],
     ['Times charged to 100%', charging_to_100_times],
     ['Times charged to 90%', charging_to_90_times],
-    ['Time spent between 20%~80%', rounded(between_20_80_times / data_points * 100)],
-    ['Time spent between 45%~58%', rounded(between_45_58_times / data_points * 100)],
-    ['Average screen on Overall', rounded(total_sot_percent)],
+    ['Time spent between 20%~80% (%)', rounded(between_20_80_times / data_points * 100)],
+    ['Time spent between 45%~58% (%)', rounded(between_45_58_times / data_points * 100)],
+    ['Average screen on (%)', rounded(total_sot_percent)],
     ['    Monday', rounded(dow_buckets[0])],  # "\t" won't tabulate well because it's retarded
     ['    Tuesday', rounded(dow_buckets[1])],
     ['    Wednesday', rounded(dow_buckets[2])],
@@ -111,11 +99,7 @@ rows = [
     ['    Friday', rounded(dow_buckets[4])],
     ['    Saturday', rounded(dow_buckets[5])],
     ['    Sunday', rounded(dow_buckets[6])],
-    ['Screen on by hour', None],
-    ['Average voltage', average_voltage],
+    ['Average voltage (V)', rounded(average_voltage)],
 ]
-
-for hour in range(24):
-    rows.append(['    {}:00'.format(hour), rounded(tod_buckets[hour])])
 
 print(tabulate.tabulate(rows))
