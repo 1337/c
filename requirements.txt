@@ -1,0 +1,12 @@
+-f http://internal.rideco.com/pip/
+-f http://carnage.transitlabs.local/pip/
+cycler==0.10.0
+kiwisolver==1.0.1
+matplotlib==2.2.0
+numpy==1.14.2
+pandas==0.22.0
+pyparsing==2.2.0
+python-dateutil==2.7.0
+pytz==2018.3
+six==1.11.0
+tabulate==0.8.2
