@@ -2,139 +2,120 @@
 
 import csv
 import datetime
+import pandas as pd
+import tabulate
 
-data_points = 0
-now_capacity = None
-charging = False
-fully_charged = False
-charged_to_90 = False
-charge_cycles = 0
-discharge_cycles = 0
-charging_to_100_times = 0
-charging_to_90_times = 0
-between_20_80_times = 0
-ons = 0
-offs = 0
-prev_row = None
-screen_on_discharge_rates = []
-screen_off_discharge_rates = []
-screen_on_charge_rates = []
-screen_off_charge_rates = []
-start_date = None
-end_date = datetime.datetime.now().date()
-week_buckets = [[], [], [], [], [], [], []]
-tod_buckets = [[], [], [], [], [], [], [], [], 
-               [], [], [], [], [], [], [], [], 
-               [], [], [], [], [], [], [], []]
 
-def mean(numbers):
-    return round(float(sum(numbers)) / max(len(numbers), 1), 2)
+tabulate.PRESERVE_WHITESPACE = True
 
-def average_on(entries):
-    ons = [x for x in entries if 'on' in x]
-    if not entries:
+
+def str_to_date(x):
+    if isinstance(x, datetime.date):
+        return x
+    return datetime.datetime.strptime(x, '%Y-%m-%d').date()
+
+
+def clean_voltage(x):
+    try:
+        x = int(x)
+    except (ValueError, TypeError):
         return 0
-    return len(ons)/len(entries)
+    if 0 <= x <= 4500000:
+        return x
+    return 0
+
 
 def rounded(num):
     return round(num, 2)
 
-try:
-    f = open('battery_history.csv', newline='')
-except IOError:
-    f = open('/home/brian/Downloads/battery_history.csv', newline='')
 
-with f:
-    reader = csv.reader(f, delimiter=',')
-    for row in reader:
-        data_points += 1
+df = pd.read_csv(
+    open('battery_history.csv'),
+    delimiter=',',
+    header=None,  # "csv has no headers"
+    names=['date', 'hour', 'percent', 'display', 'voltage'])
 
-        if now_capacity is None:
-            now_capacity = row[2]
-            start_date = datetime.datetime.strptime(row[0], '%Y-%m-%d').date()
-            continue
-        row_date = datetime.datetime.strptime(row[0], '%Y-%m-%d').date()
-        week_buckets[row_date.isoweekday() - 1].append(row[3].strip())
-        
-        if 20 <= int(now_capacity) <= 80:
-            between_20_80_times += 1
+# Map function to column, then put the column back (or another column)
+df['date'] = df['date'].apply(str_to_date)
+df['weekday'] = df['date'].apply(lambda x: x.isoweekday() - 1)
+df['hour'] = df['hour'].apply(float)
+df['percent'] = df['percent'].apply(int)
+df['percent_row_before'] = df['percent'].apply(int).shift(1)
+df['percent_row_after'] = df['percent'].apply(int).shift(-1)
+df['voltage'] = df['voltage'].apply(clean_voltage)
 
-        if row[2] > now_capacity:
-            # Capacity seen going up.
-            if not charging:
-                charging = True
-                charge_cycles += 1
-        elif row[2] < now_capacity:
-            # Capacity seen going down.
-            if charging:
-                charging = False
-                discharge_cycles += 1
-        else:
-            # Didn't change.
-            pass
 
-        if int(row[2]) == 100:
-            if not fully_charged:
-                fully_charged = True
-                charging_to_100_times += 1
-        else:
-            if fully_charged:
-                fully_charged = False
+dow_buckets = [None] * 7
+tod_buckets = [None] * 24
+data_points = len(df)
 
-        if int(row[2]) > 90:
-            if not charged_to_90:
-                charged_to_90 = True
-                charging_to_90_times += 1
-        else:
-            if charged_to_90:
-                charged_to_90 = False
+between_20_80_times = max(df[
+    (20 <= df.percent) & 
+    (df.percent <= 80)].count())  # Conditions cannot be chained
+between_45_58_times = max(df[
+    (45 <= df.percent) & 
+    (df.percent <= 58)].count())
+charge_cycles = max(df[
+    (df.percent_row_before < df.percent) & 
+    (df.percent_row_after <= df.percent)].count())  # Inflection point
+discharge_cycles = max(df[
+    (df.percent_row_before > df.percent) & 
+    (df.percent_row_after > df.percent)].count())  # Not >= because 100% stays 100%
+charging_to_100_times = max(df[
+    (df.percent_row_before == df.percent) & 
+    (df.percent_row_after < df.percent) & 
+    (df.percent == 100)].count())
+charging_to_90_times = max(df[
+    (df.percent_row_before < 90) & 
+    (df.percent >= 90)].count())
 
-        tod_buckets[int(float(row[1].strip()))].append(row[3])
-        if 'on' in row[3]:
-            ons += 1
-            if prev_row:
-                rate = (float(row[2]) - float(prev_row[2])) * 6
-                if charging:
-                    screen_on_charge_rates.append(rate)
-                else:
-                    screen_on_discharge_rates.append(rate)
-        elif 'off' in row[3]:
-            offs += 1
-            if prev_row:
-                rate = (float(row[2]) - float(prev_row[2])) * 6
-                if charging:
-                    screen_off_charge_rates.append(rate)
-                else:
-                    screen_off_discharge_rates.append(rate)
+average_voltage = int(df[df.voltage > 0].voltage.mean())
 
-        prev_row = row
-        now_capacity = row[2]
+screen_on_df = df[df.display == 'on']
+total_sot_percent = \
+    max(screen_on_df.count()) / data_points * 100
 
-days = (end_date - start_date).days
-screen_on_discharge_rate = mean(screen_on_discharge_rates)
-screen_off_discharge_rate = mean(screen_off_discharge_rates)
+for idx in range(7):
+    dow_buckets[idx] = (
+        max(screen_on_df[screen_on_df.weekday == idx].count())
+        / max(df[df.weekday == idx].count())
+    ) * 100
 
-print('Data points:\t\t\t', data_points)
-print('Days:\t\t\t\t', days)
-print('Cycles:\t\t\t\t', charge_cycles, discharge_cycles, '(', rounded(charge_cycles / days), 'per day)')
-print('Times charged to 100%:\t\t', charging_to_100_times)
-print('Times charged to 90%:\t\t', charging_to_90_times)
-print('Time spent between 20%~80%:\t', rounded(between_20_80_times / data_points))
-print('Average screen on Overall:\t', rounded(ons / (ons + offs)))
-print('\tMonday:\t\t\t', rounded(average_on(week_buckets[0])))
-print('\tTuesday:\t\t', rounded(average_on(week_buckets[1])))
-print('\tWednesday:\t\t', rounded(average_on(week_buckets[2])))
-print('\tThursday:\t\t', rounded(average_on(week_buckets[3])))
-print('\tFriday:\t\t\t', rounded(average_on(week_buckets[4])))
-print('\tSaturday:\t\t', rounded(average_on(week_buckets[5])))
-print('\tSunday:\t\t\t', rounded(average_on(week_buckets[6])))
-print('Screen on by hour:')
+for idx in range(24):
+    tod_buckets[idx] = (
+        max(screen_on_df[
+            (screen_on_df.hour >= idx) &
+            (screen_on_df.hour < idx + 1)].count())
+        / max(df[
+            (df.hour >= idx) &
+            (df.hour < idx + 1)].count())
+    ) * 100
+
+
+days = (df['date'].max() - df['date'].min()).days
+
+rows = [
+    ['Data points', data_points],
+    ['Days', None, days],
+    ['Charge cycles', charge_cycles, rounded(charge_cycles / days)],
+    ['Discharge cycles', discharge_cycles, rounded(discharge_cycles / days)],
+    ['Times charged to 100%', charging_to_100_times],
+    ['Times charged to 90%', charging_to_90_times],
+    ['Time spent between 20%~80%', rounded(between_20_80_times / data_points * 100)],
+    ['Time spent between 45%~58%', rounded(between_45_58_times / data_points * 100)],
+    ['Average screen on Overall', rounded(total_sot_percent)],
+    ['    Monday', rounded(dow_buckets[0])],  # "\t" won't tabulate well because it's retarded
+    ['    Tuesday', rounded(dow_buckets[1])],
+    ['    Wednesday', rounded(dow_buckets[2])],
+    ['    Thursday', rounded(dow_buckets[3])],
+    ['    Friday', rounded(dow_buckets[4])],
+    ['    Saturday', rounded(dow_buckets[5])],
+    ['    Sunday', rounded(dow_buckets[6])],
+    ['Screen on by hour', None],
+    ['Average voltage', average_voltage],
+]
+
 for hour in range(24):
-    print('\t{}:00:\t\t\t'.format(hour), 
-          rounded(average_on(tod_buckets[hour])))
-print('Screen on discharge rate:\t', screen_on_discharge_rate, '%/hr')
-print('Screen off discharge rate:\t', screen_off_discharge_rate, '%/hr')
-print('Screen on charge rate:\t\t', mean(screen_on_charge_rates), '%/hr')
-print('Screen off charge rate:\t\t', mean(screen_off_charge_rates), '%/hr')
-print('Nominal screen on time:\t\t', round(-60 / screen_on_discharge_rate, 0), 'hrs')
-print('Nominal standby time:\t\t', round(-60 / screen_off_discharge_rate, 0), 'hrs')
+    rows.append(['    {}:00'.format(hour), rounded(tod_buckets[hour])])
+
+print(tabulate.tabulate(rows))
