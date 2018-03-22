@@ -1,20 +1,13 @@
 #!/usr/bin/env python3
 
-import csv
-import datetime
-import pandas as pd
 import matplotlib.pyplot as plt
 
+import reader
 
-df = pd.read_csv(
-    open('battery_history.csv'),
-    delimiter=',',
-    header=None,  # "csv has no headers"
-    names=['date', 'hour', 'percent', 'display', 'voltage'])
 
-df['percent'] = df['percent'].apply(int)
-
+df = reader.read_battery_history()
 values = df.percent.value_counts()
+
 ys = []
 for idx in range(100):
     try:
