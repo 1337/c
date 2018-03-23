@@ -36,16 +36,22 @@ def plot(df, canvas):
 
         x_smooth, y_smooth = smoothed_line(data=day_plot, points=points)
 
-        canvas.plot(x_smooth, y_smooth, color=colors[day])
+        if day == 0:
+            canvas.plot(x_smooth, y_smooth, color=colors[day],
+                        label='Weekdays')
+        elif day == 6:
+            canvas.plot(x_smooth, y_smooth, color=colors[day],
+                        label='Weekends')
+        else:
+            canvas.plot(x_smooth, y_smooth, color=colors[day])
+
+    canvas.legend(loc='upper left')
+    canvas.set_xlabel('Time of day (h)')
+    canvas.set_ylabel('Probability screen is on (%)')
+    canvas.set_title('Screen usage by day of week and time of day')
 
 
 if __name__ == '__main__':
     fig, ax = plt.subplots()
-    plot(df=reader.read_battery_history(),
-         canvas=ax)
-
-    ax.set_xlabel('Time (h)')
-    ax.set_ylabel('Probability screen is on (%)')
-    ax.set_title('Screen usage by day of week and time of day')
-
+    plot(df=reader.read_battery_history(), canvas=ax)
     plt.show()

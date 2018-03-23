@@ -20,15 +20,17 @@ def read_battery_history():
     df['percent'] = df['percent'].apply(int)
     df['percent_row_before'] = df['percent'].apply(int).shift(1)
     df['percent_row_after'] = df['percent'].apply(int).shift(-1)
+    df['percent_7_day_rolling'] = df['percent'].rolling(window=1008).mean()
+    df['percent_30_day_rolling'] = df['percent'].rolling(window=4320).mean()
     df['voltage'] = df['voltage'].apply(clean_voltage)
 
     return df
 
 
-def get_last_31_days(df):
-    _31_days_ago = (
-        datetime.datetime.now() - datetime.timedelta(days=31)).date()
-    return df[df.date >= _31_days_ago]
+def get_last_30_days(df):
+    _30_days_ago = (
+        datetime.datetime.now() - datetime.timedelta(days=30)).date()
+    return df[df.date >= _30_days_ago]
 
 
 def get_between_20_80_times(df) -> int:
