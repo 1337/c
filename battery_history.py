@@ -4,10 +4,15 @@ import matplotlib.pyplot as plt
 
 import reader
 
-df = reader.read_battery_history()
 
-plt.plot(df.percent)
-plt.axhline(y=80, linewidth=1, color='r')
-plt.axhline(y=58, linewidth=1, color='g')
-plt.axhline(y=40, linewidth=1, color='g')
-plt.show()
+def plot(df, canvas):
+    canvas.plot(df.percent, linewidth=1)
+    canvas.axhline(y=80, linewidth=1, color='r')
+    canvas.axhline(y=58, linewidth=1, color='g')
+    canvas.axhline(y=40, linewidth=1, color='g')
+
+
+if __name__ == '__main__':
+    plot(df=reader.read_battery_history(),
+         canvas=plt)
+    plt.show()
