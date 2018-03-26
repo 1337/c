@@ -70,6 +70,12 @@ def get_charging_to_90_times(df) -> int:
         (df.percent >= 90)].count())
 
 
+def get_charging_to_80_times(df) -> int:
+    return max(df[
+        (df.percent_row_before < 80) &
+        (df.percent >= 80)].count())
+
+
 class Analyzer(object):
     df = None
 
@@ -111,6 +117,10 @@ class Analyzer(object):
     @property
     def charging_to_90_times(self):
         return get_charging_to_90_times(self.df)
+
+    @property
+    def charging_to_80_times(self):
+        return get_charging_to_80_times(self.df)
 
     @property
     def average_voltage(self):

@@ -16,10 +16,10 @@ rows = [
     [None, 'Lifetime', 'Last 30 days'],
     ['Data points', len(overall_analyzer.df)],
     ['Days', overall_analyzer.days],
-    ['Charge events',
+    ['Charge events*',
      overall_analyzer.charge_events,
      last_30_analyzer.charge_events],
-    ['Discharge events',
+    ['Discharge events*',
      overall_analyzer.discharge_events,
      last_30_analyzer.discharge_events],
     ['Times charged to 100%',
@@ -28,6 +28,9 @@ rows = [
     ['Times charged to 90%',
      overall_analyzer.charging_to_90_times,
      last_30_analyzer.charging_to_90_times],
+    ['Times charged to 80%',
+     overall_analyzer.charging_to_80_times,
+     last_30_analyzer.charging_to_80_times],
     ['Time spent between 20%~80% (%)',
      overall_analyzer.between_20_80_percent,
      last_30_analyzer.between_20_80_percent],
@@ -65,3 +68,4 @@ rows = [
 ]
 
 print(tabulate.tabulate(rows))
+print('* Not accurate. If it were then the two values would match.')
