@@ -137,3 +137,18 @@ class Analyzer(object):
         return rounded(
             max(screen_on_df[screen_on_df.weekday == weekday].count()) /
             max(self.df[self.df.weekday == weekday].count()) * 100)
+
+    def by_day_and_hour(self, day=None, hour=None):
+        if day is not None:
+            day_df = self.df[self.df.weekday == day]
+        else:
+            day_df = self.df
+
+        if hour is not None:
+            hour_df = day_df[
+                (day_df.hour >= hour) &
+                (day_df.hour < hour + 1)]
+        else:
+            hour_df = day_df
+
+        return self.__class__(hour_df)

@@ -6,16 +6,24 @@ import reader
 from common import smoothed_line
 
 colors = [
-    '#6699ff',
-    '#6699ff',
-    '#6699ff',
-    '#6699ff',
-    '#6699ff',
+    '#99ccff',
+    '#99ccff',
+    '#99ccff',
+    '#99ccff',
+    '#99ccff',
     '#ff6600',
     '#ff6600',
 ]
 
-points = 480
+
+def plot_smooth_line(canvas, xys, points=480, color=None, label=None):
+    x_smooth, y_smooth = smoothed_line(data=xys, points=points)
+    kwargs = {}
+    if color:
+        kwargs['color'] = color
+    if label:
+        kwargs['label'] = label
+    canvas.plot(x_smooth, y_smooth, **kwargs)
 
 
 def plot(df, canvas):
@@ -23,35 +31,39 @@ def plot(df, canvas):
         day_plot = []
         stats_on_day = df[df.weekday == day]
         for hour in range(24):
-            hour_points = stats_on_day[
-                (stats_on_day.hour >= hour) &
-                (stats_on_day.hour < hour + 1)]
-            hour_on = hour_points[hour_points.display == 'on']
-            hour_off = hour_points[hour_points.display == 'off']
-
-            val = max(
-                hour_on.count() /
-                (hour_on.count() + hour_off.count())) * 100
+            val = reader.Analyzer(df).by_day_and_hour(day, hour).screen_on_percent
             day_plot.append((hour, val))
 
-        x_smooth, y_smooth = smoothed_line(data=day_plot, points=points)
-
         if day == 0:
-            canvas.plot(x_smooth, y_smooth, color=colors[day],
-                        label='Weekdays')
+            label = 'Weekdays'
         elif day == 6:
-            canvas.plot(x_smooth, y_smooth, color=colors[day],
-                        label='Weekends')
+            label = 'Weekends'
         else:
-            canvas.plot(x_smooth, y_smooth, color=colors[day])
+            label = None
+        plot_smooth_line(canvas=canvas, xys=day_plot, color=colors[day],
+                         label=label)
+
+    last_30_days_df = reader.get_last_30_days(df)
+    last_30_plot = []
+    for hour in range(24):
+        val = reader.Analyzer(last_30_days_df)\
+                .by_day_and_hour(hour=hour)\
+                .screen_on_percent
+        last_30_plot.append((hour, val))
+
+    plot_smooth_line(canvas=canvas,
+                     xys=last_30_plot,
+                     color='#00cc00',
+                     label='Last 30 days')
 
     canvas.legend(loc='upper left')
     canvas.set_xlabel('Time of day (h)')
     canvas.set_ylabel('Probability screen is on (%)')
-    canvas.set_title('Screen usage by day of week and time of day')
+    canvas.set_title('Screen on by day of week and time of day')
 
 
 if __name__ == '__main__':
     fig, ax = plt.subplots()
-    plot(df=reader.read_battery_history(), canvas=ax)
+    df = reader.read_battery_history()
+    plot(df=df, canvas=ax)
     plt.show()

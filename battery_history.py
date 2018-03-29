@@ -6,7 +6,8 @@ import reader
 
 
 def plot(df, canvas):
-    canvas.scatter(df.index, df.percent, label='Level', color='#ddddff', marker='x')
+    # canvas.scatter(df.index, df.percent, label='Level', color='#ddddff', marker='x')
+    canvas.plot(df.percent, label='Level', color='#ddddff')
     canvas.plot(df.percent_7_day_rolling, linewidth=1, label='7-day average')
     canvas.plot(df.percent_30_day_rolling, linewidth=1, label='30-day average')
 

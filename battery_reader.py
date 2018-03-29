@@ -16,12 +16,6 @@ rows = [
     [None, 'Lifetime', 'Last 30 days'],
     ['Data points', len(overall_analyzer.df)],
     ['Days', overall_analyzer.days],
-    ['Charge events*',
-     overall_analyzer.charge_events,
-     last_30_analyzer.charge_events],
-    ['Discharge events*',
-     overall_analyzer.discharge_events,
-     last_30_analyzer.discharge_events],
     ['Times charged to 100%',
      overall_analyzer.charging_to_100_times,
      last_30_analyzer.charging_to_100_times],
@@ -65,6 +59,12 @@ rows = [
      last_30_analyzer.screen_on_percent_by_day(6)],
     ['Average voltage (V)', overall_analyzer.average_voltage,
      last_30_analyzer.average_voltage],
+    ['Charge events*',
+     overall_analyzer.charge_events,
+     last_30_analyzer.charge_events],
+    ['Discharge events*',
+     overall_analyzer.discharge_events,
+     last_30_analyzer.discharge_events],
 ]
 
 print(tabulate.tabulate(rows))
