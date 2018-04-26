@@ -33,6 +33,12 @@ def get_last_30_days(df):
     return df[df.date >= _30_days_ago]
 
 
+def get_last_7_days(df):
+    _7_days_ago = (
+        datetime.datetime.now() - datetime.timedelta(days=7)).date()
+    return df[df.date >= _7_days_ago]
+
+
 def get_between_20_80_times(df) -> int:
     return max(df[
         (20 <= df.percent) &
@@ -140,7 +146,10 @@ class Analyzer(object):
 
     def by_day_and_hour(self, day=None, hour=None):
         if day is not None:
-            day_df = self.df[self.df.weekday == day]
+            if isinstance(day, list):
+                day_df = self.df[self.df.weekday.isin(day)]
+            else:
+                day_df = self.df[self.df.weekday == day]
         else:
             day_df = self.df
 
