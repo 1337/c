@@ -30,56 +30,55 @@ def read_battery_history():
 def get_last_30_days(df):
     _30_days_ago = (
         datetime.datetime.now() - datetime.timedelta(days=30)).date()
-    return df[df.date >= _30_days_ago]
+    return df[df.date > _30_days_ago]
 
 
 def get_last_7_days(df):
     _7_days_ago = (
         datetime.datetime.now() - datetime.timedelta(days=7)).date()
-    return df[df.date >= _7_days_ago]
+    return df[df.date > _7_days_ago]
 
 
 def get_between_20_80_times(df) -> int:
-    return max(df[
-        (20 <= df.percent) &
-        (df.percent <= 80)].count())  # Conditions cannot be chained
+    return len(df[
+        (20 <= df.percent) & (df.percent <= 80)])  # Conditions cannot be chained
 
 
 def get_between_44_58_times(df) -> int:
-    return max(df[
+    return len(df[
         (44 <= df.percent) &
-        (df.percent <= 58)].count())  # Conditions cannot be chained
+        (df.percent <= 58)])  # Conditions cannot be chained
 
 
 def get_charge_events(df) -> int:
-    return max(df[
+    return len(df[
         (df.percent_row_before < df.percent) &
-        (df.percent_row_after <= df.percent)].count())  # Inflection point
+        (df.percent_row_after <= df.percent)])  # Inflection point
 
 
 def get_discharge_events(df) -> int:
-    return max(df[
+    return len(df[
         (df.percent_row_before > df.percent) &
-        (df.percent_row_after > df.percent)].count())  # Not >= because 100% stays 100%
+        (df.percent_row_after > df.percent)])  # Not >= because 100% stays 100%
 
 
 def get_charging_to_100_times(df) -> int:
-    return max(df[
+    return len(df[
         (df.percent_row_before == df.percent) &
         (df.percent_row_after < df.percent) &
-        (df.percent == 100)].count())
+        (df.percent == 100)])
 
 
 def get_charging_to_90_times(df) -> int:
-    return max(df[
+    return len(df[
         (df.percent_row_before < 90) &
-        (df.percent >= 90)].count())
+        (df.percent >= 90)])
 
 
 def get_charging_to_80_times(df) -> int:
-    return max(df[
+    return len(df[
         (df.percent_row_before < 80) &
-        (df.percent >= 80)].count())
+        (df.percent >= 80)])
 
 
 class Analyzer(object):
@@ -136,13 +135,12 @@ class Analyzer(object):
     @property
     def screen_on_percent(self):
         screen_on_df = self.df[self.df.display == 'on']
-        return rounded(max(screen_on_df.count()) / len(self.df) * 100)
+        return rounded(len(screen_on_df) / len(self.df) * 100)
 
     def screen_on_percent_by_day(self, weekday):
-        screen_on_df = self.df[self.df.display == 'on']
-        return rounded(
-            max(screen_on_df[screen_on_df.weekday == weekday].count()) /
-            max(self.df[self.df.weekday == weekday].count()) * 100)
+        day_df = self.df[self.df.weekday == weekday]
+        frac = (len(day_df[day_df.display == 'on']) / len(day_df))
+        return rounded(frac * 100)
 
     def by_day_and_hour(self, day=None, hour=None):
         if day is not None:

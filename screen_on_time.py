@@ -17,28 +17,30 @@ def plot_smooth_line(canvas, xys, points=480, color=None, label=None):
 
 
 def plot(df, canvas):
-    label = 'Weekdays'
     day_plot = []
     for hour in range(24):
-        val = reader.Analyzer(df).by_day_and_hour([0,1,2,3,4], hour).screen_on_percent
+        val = reader.Analyzer(df) \
+            .by_day_and_hour([0, 1, 2, 3, 4], hour) \
+            .screen_on_percent
         day_plot.append((hour, val))
     plot_smooth_line(canvas=canvas, xys=day_plot, color='#99ccff',
-                     label=label)
+                     label='Weekdays')
 
-    label = 'Weekends'
     day_plot = []
     for hour in range(24):
-        val = reader.Analyzer(df).by_day_and_hour([5, 6], hour).screen_on_percent
+        val = reader.Analyzer(df) \
+            .by_day_and_hour([5, 6], hour) \
+            .screen_on_percent
         day_plot.append((hour, val))
     plot_smooth_line(canvas=canvas, xys=day_plot, color='#ff6600',
-                     label=label)
+                     label='Weekends')
 
     last_30_days_df = reader.get_last_30_days(df)
     last_30_plot = []
     for hour in range(24):
-        val = reader.Analyzer(last_30_days_df)\
-                .by_day_and_hour(hour=hour)\
-                .screen_on_percent
+        val = reader.Analyzer(last_30_days_df) \
+            .by_day_and_hour(hour=hour) \
+            .screen_on_percent
         last_30_plot.append((hour, val))
 
     plot_smooth_line(canvas=canvas,

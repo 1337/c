@@ -2,6 +2,7 @@
 
 import tabulate
 
+from common import rounded
 import reader
 
 tabulate.PRESERVE_WHITESPACE = True
@@ -64,46 +65,46 @@ rows = [
 
     [None],  # Separator
 
-    ['Screen on per day (%)',
-     overall_analyzer.screen_on_percent,
-     last_30_analyzer.screen_on_percent,
-     last_7_analyzer.screen_on_percent],
+    ['Screen on per day (hrs)',
+     rounded(overall_analyzer.screen_on_percent * 0.24),
+     rounded(last_30_analyzer.screen_on_percent * 0.24),
+     rounded(last_7_analyzer.screen_on_percent * 0.24)],
 
     # "\t" won't tabulate well because it's retarded
     ['  - Mondays',
-     overall_analyzer.screen_on_percent_by_day(0),
-     last_30_analyzer.screen_on_percent_by_day(0),
-     last_7_analyzer.screen_on_percent_by_day(0),
+     rounded(overall_analyzer.screen_on_percent_by_day(0) * 0.24),
+     rounded(last_30_analyzer.screen_on_percent_by_day(0) * 0.24),
+     rounded(last_7_analyzer.screen_on_percent_by_day(0) * 0.24),
      'M'],
     ['  - Tuesdays',
-     overall_analyzer.screen_on_percent_by_day(1),
-     last_30_analyzer.screen_on_percent_by_day(1),
-     last_7_analyzer.screen_on_percent_by_day(1),
+     rounded(overall_analyzer.screen_on_percent_by_day(1) * 0.24),
+     rounded(last_30_analyzer.screen_on_percent_by_day(1) * 0.24),
+     rounded(last_7_analyzer.screen_on_percent_by_day(1) * 0.24),
      'T'],
     ['  - Wednesdays',
-     overall_analyzer.screen_on_percent_by_day(2),
-     last_30_analyzer.screen_on_percent_by_day(2),
-     last_7_analyzer.screen_on_percent_by_day(2),
+     rounded(overall_analyzer.screen_on_percent_by_day(2) * 0.24),
+     rounded(last_30_analyzer.screen_on_percent_by_day(2) * 0.24),
+     rounded(last_7_analyzer.screen_on_percent_by_day(2) * 0.24),
      'W'],
     ['  - Thursdays',
-     overall_analyzer.screen_on_percent_by_day(3),
-     last_30_analyzer.screen_on_percent_by_day(3),
-     last_7_analyzer.screen_on_percent_by_day(3),
+     rounded(overall_analyzer.screen_on_percent_by_day(3) * 0.24),
+     rounded(last_30_analyzer.screen_on_percent_by_day(3) * 0.24),
+     rounded(last_7_analyzer.screen_on_percent_by_day(3) * 0.24),
      'T'],
     ['  - Fridays',
-     overall_analyzer.screen_on_percent_by_day(4),
-     last_30_analyzer.screen_on_percent_by_day(4),
-     last_7_analyzer.screen_on_percent_by_day(4),
+     rounded(overall_analyzer.screen_on_percent_by_day(4) * 0.24),
+     rounded(last_30_analyzer.screen_on_percent_by_day(4) * 0.24),
+     rounded(last_7_analyzer.screen_on_percent_by_day(4) * 0.24),
      'F'],
     ['  - Saturdays',
-     overall_analyzer.screen_on_percent_by_day(5),
-     last_30_analyzer.screen_on_percent_by_day(5),
-     last_7_analyzer.screen_on_percent_by_day(5),
+     rounded(overall_analyzer.screen_on_percent_by_day(5) * 0.24),
+     rounded(last_30_analyzer.screen_on_percent_by_day(5) * 0.24),
+     rounded(last_7_analyzer.screen_on_percent_by_day(5) * 0.24),
      'S'],
     ['  - Sundays',
-     overall_analyzer.screen_on_percent_by_day(6),
-     last_30_analyzer.screen_on_percent_by_day(6),
-     last_7_analyzer.screen_on_percent_by_day(6),
+     rounded(overall_analyzer.screen_on_percent_by_day(6) * 0.24),
+     rounded(last_30_analyzer.screen_on_percent_by_day(6) * 0.24),
+     rounded(last_7_analyzer.screen_on_percent_by_day(6) * 0.24),
      'S'],
 ]
 
