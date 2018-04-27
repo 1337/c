@@ -18,25 +18,29 @@ def read_battery_history():
     df['weekday'] = df['date'].apply(lambda x: x.isoweekday() - 1)
     df['hour'] = df['hour'].apply(float)
     df['percent'] = df['percent'].apply(int)
+    df['voltage'] = df['voltage'].apply(clean_voltage)
+
+    # Do some maths
     df['percent_row_before'] = df['percent'].apply(int).shift(1)
     df['percent_row_after'] = df['percent'].apply(int).shift(-1)
     df['percent_7_day_rolling'] = df['percent'].rolling(window=1008).mean()
     df['percent_30_day_rolling'] = df['percent'].rolling(window=4320).mean()
-    df['voltage'] = df['voltage'].apply(clean_voltage)
 
     return df
 
 
+def get_last_n_days(*, df, n):
+    n_days_ago = (
+        datetime.datetime.now() - datetime.timedelta(days=n)).date()
+    return df[df.date > n_days_ago]
+
+
 def get_last_30_days(df):
-    _30_days_ago = (
-        datetime.datetime.now() - datetime.timedelta(days=30)).date()
-    return df[df.date > _30_days_ago]
+    return get_last_n_days(df=df, n=30)
 
 
 def get_last_7_days(df):
-    _7_days_ago = (
-        datetime.datetime.now() - datetime.timedelta(days=7)).date()
-    return df[df.date > _7_days_ago]
+    return get_last_n_days(df=df, n=7)
 
 
 def get_between_20_80_times(df) -> int:
@@ -139,7 +143,14 @@ class Analyzer(object):
 
     def screen_on_percent_by_day(self, weekday):
         day_df = self.df[self.df.weekday == weekday]
-        frac = (len(day_df[day_df.display == 'on']) / len(day_df))
+
+        # At a 10-minute collection interval, the number of points
+        # collected per day is 144.
+        # If we don't have 144 then obviously something's missing
+        datapoints = 86400 / 600
+        datapoints = max(datapoints, len(day_df))
+
+        frac = (len(day_df[day_df.display == 'on']) / datapoints)
         return rounded(frac * 100)
 
     def by_day_and_hour(self, day=None, hour=None):

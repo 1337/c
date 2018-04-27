@@ -45,7 +45,7 @@ def plot(df, canvas):
 
     plot_smooth_line(canvas=canvas,
                      xys=last_30_plot,
-                     color='#00cc00',
+                     color='#666666',
                      label='Last 30 days')
 
     canvas.legend(loc='upper left')
