@@ -19,6 +19,13 @@ def plot(df, canvas):
     canvas.legend(loc='upper left')
     canvas.set_title('Battery voltage by capacity')
 
+    averages = []
+    for percent in range(100):
+        average = df[df.percent == percent].mean()['Voltage']
+        averages.append(average)
+
+    canvas.plot(range(100), averages)
+
 if __name__ == '__main__':
     fig, ax = plt.subplots()
     plot(df=reader.read_battery_history(), canvas=ax)
