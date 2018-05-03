@@ -19,6 +19,7 @@ def read_battery_history():
     df['hour'] = df['hour'].apply(float)
     df['percent'] = df['percent'].apply(int)
     df['voltage'] = df['voltage'].apply(clean_voltage)
+    df['Voltage'] = df['voltage'].apply(lambda x: x / 1000000)
 
     # Do some maths
     df['percent_row_before'] = df['percent'].apply(int).shift(1)
