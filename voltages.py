@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 import reader
 
@@ -19,12 +20,21 @@ def plot(df, canvas):
     canvas.legend(loc='upper left')
     canvas.set_title('Battery voltage by capacity')
 
-    averages = []
-    for percent in range(100):
-        average = df[df.percent == percent].mean()['Voltage']
-        averages.append(average)
+    # averages = []
+    # for percent in range(100):
+    #     average = df[df.percent == percent].mean()['Voltage']
+    #     averages.append(average)
+    #
+    # canvas.plot(range(100), averages)
 
-    canvas.plot(range(100), averages)
+    # Polynomial trend line
+    z = np.polyfit(df.percent, df.Voltage, deg=3)
+    p = np.poly1d(z)
+    points = sorted(df.percent)
+    canvas.plot(points, p(points), c='#ff9900')
+
+    canvas.axhline(y=3.92, linewidth=1, color='#ff9900')
+
 
 if __name__ == '__main__':
     fig, ax = plt.subplots()
