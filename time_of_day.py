@@ -20,20 +20,20 @@ def plot(df, canvas):
     plot = []
     for hour in range(24):
         val = reader.Analyzer(df) \
-            .by_day_and_hour(hour=hour) \
+            .by_weekday_and_hour(hour=hour) \
             .screen_on_percent
         plot.append((hour, val))
 
     plot_smooth_line(canvas=canvas,
                      xys=plot,
-                     color='#95af95',
+                     color='#b5b5b5',
                      label='Lifetime')
 
     last_30_days_df = reader.get_last_30_days(df)
     last_30_plot = []
     for hour in range(24):
         val = reader.Analyzer(last_30_days_df) \
-            .by_day_and_hour(hour=hour) \
+            .by_weekday_and_hour(hour=hour) \
             .screen_on_percent
         last_30_plot.append((hour, val))
 
@@ -45,7 +45,7 @@ def plot(df, canvas):
     canvas.legend(loc='upper left')
     canvas.set_xlabel('Time of day (h)')
     canvas.set_ylabel('Probability screen is on (%)')
-    canvas.set_title('Screen on by day of week and time of day')
+    canvas.set_title('Screen on by time of day')
 
 
 if __name__ == '__main__':

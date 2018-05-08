@@ -32,13 +32,14 @@ def plot(df, canvas):
     canvas.plot(ys, label='Last 30 days')
 
     canvas.legend(loc="upper left")
-    canvas.axvline(x=20, linewidth=1, color='r')
+    canvas.axvline(x=20, linewidth=1, color='r', alpha=0.5)
     # canvas.axvline(x=44, linewidth=1, color='g')
     # canvas.axvline(x=58, linewidth=1, color='g')
-    canvas.axvline(x=80, linewidth=1, color='r')
+    canvas.axvline(x=80, linewidth=1, color='r', alpha=0.5)
     canvas.set_xlabel('Battery level (%)')
     canvas.set_ylabel('Cumulative time spent (%)')
     canvas.set_title('Battery percentage cumulative frequency')
+
 
 if __name__ == '__main__':
     fig, ax = plt.subplots()

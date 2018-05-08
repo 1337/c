@@ -10,6 +10,15 @@ def str_to_date(x):
     return datetime.datetime.strptime(x, '%Y-%m-%d').date()
 
 
+def date_time_to_datetime(x):
+    date, hours_raw = x
+    hours = int(hours_raw)
+    seconds = (hours_raw - hours) * 100 * 60  # 0.3 in this case means 30 minutes
+    time_in_hours = datetime.timedelta(hours=hours, seconds=seconds)
+    return datetime.datetime.combine(
+        date, datetime.datetime.min.time()) + time_in_hours
+
+
 def clean_voltage(x):
     try:
         x = int(x)

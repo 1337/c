@@ -17,7 +17,7 @@ def plot(df, canvas):
         alpha=0.2)
     canvas.set_xlabel('Battery percent')
     canvas.set_ylabel('Voltage (V)')
-    canvas.legend(loc='upper left')
+    #canvas.legend(loc='upper left')
     canvas.set_title('Battery voltage by capacity')
 
     # averages = []
@@ -31,9 +31,9 @@ def plot(df, canvas):
     z = np.polyfit(df.percent, df.Voltage, deg=3)
     p = np.poly1d(z)
     points = sorted(df.percent)
-    canvas.plot(points, p(points), c='#ff9900')
+    canvas.plot(points, p(points), c='#3bba9c')
 
-    canvas.axhline(y=3.92, linewidth=1, color='#ff9900')
+    canvas.axhline(y=3.92, linewidth=1, color='r', alpha=0.5)
 
 
 if __name__ == '__main__':

@@ -28,10 +28,10 @@ def plot(df, canvas):
     canvas.plot(range(100), ys, label='Last 30 days')
 
     canvas.legend(loc="upper left")
-    canvas.axvline(x=20, linewidth=1, color='r')
+    canvas.axvline(x=20, linewidth=1, color='r', alpha=0.5)
     # canvas.axvline(x=44, linewidth=1, color='g')
     # canvas.axvline(x=58, linewidth=1, color='g')
-    canvas.axvline(x=80, linewidth=1, color='r')
+    canvas.axvline(x=80, linewidth=1, color='r', alpha=0.5)
     canvas.set_xlabel('Battery level (%)')
     canvas.set_ylabel('Proportion time spent in given battery level (%)')
     canvas.set_title('Battery level frequency')

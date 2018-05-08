@@ -1,8 +1,11 @@
+# coding=utf-8
+
 import datetime
+from datetime import timedelta
 
 import pandas as pd
 
-from common import clean_voltage, rounded, str_to_date
+from common import clean_voltage, rounded, str_to_date, date_time_to_datetime
 
 
 def read_battery_history():
@@ -22,6 +25,7 @@ def read_battery_history():
     df['Voltage'] = df['voltage'].apply(lambda x: x / 1000000)
 
     # Do some maths
+    df['datetime'] = df[['date', 'hour']].apply(date_time_to_datetime, axis=1)
     df['percent_row_before'] = df['percent'].apply(int).shift(1)
     df['percent_row_after'] = df['percent'].apply(int).shift(-1)
     df['percent_7_day_rolling'] = df['percent'].rolling(window=1008).mean()
@@ -142,7 +146,7 @@ class Analyzer(object):
         screen_on_df = self.df[self.df.display == 'on']
         return rounded(len(screen_on_df) / len(self.df) * 100)
 
-    def screen_on_percent_by_day(self, weekday):
+    def screen_on_percent_by_weekday(self, weekday):
         day_df = self.df[self.df.weekday == weekday]
 
         # At a 10-minute collection interval, the number of points
@@ -154,7 +158,28 @@ class Analyzer(object):
         frac = (len(day_df[day_df.display == 'on']) / datapoints)
         return rounded(frac * 100)
 
-    def by_day_and_hour(self, day=None, hour=None):
+    def screen_on_percent_by_week(self, date):
+        dt = timedelta(days=1)
+        week_df = self.df[
+            (self.df.date == date.date() + dt * 0) |
+            (self.df.date == date.date() + dt * 1) |
+            (self.df.date == date.date() + dt * 2) |
+            (self.df.date == date.date() + dt * 3) |
+            (self.df.date == date.date() + dt * 4) |
+            (self.df.date == date.date() + dt * 5) |
+            (self.df.date == date.date() + dt * 6)
+        ]
+
+        # At a 10-minute collection interval, the number of points
+        # collected per day is 144.
+        # If we don't have 144 then obviously something's missing
+        datapoints = 86400 / 600 * 7
+        datapoints = max(datapoints, len(week_df))
+
+        frac = (len(week_df[week_df.display == 'on']) / datapoints)
+        return rounded(frac * 100)
+
+    def by_weekday_and_hour(self, day=None, hour=None):
         if day is not None:
             if isinstance(day, list):
                 day_df = self.df[self.df.weekday.isin(day)]
