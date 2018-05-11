@@ -15,12 +15,13 @@ import voltages
 
 df = reader.read_battery_history()
 
-f, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3)
+f, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3, figsize=(16, 9))
 battery_history.plot(df=df, canvas=ax1)
 ax1.set_xlim([  # "show a week"
     arrow.now().replace(weeks=-1).datetime,
     arrow.now().datetime])
 ax1.set_ylim([0, 100])
+
 
 voltages.plot(df=df, canvas=ax2)
 ax2.set_xlim([0, 100])
@@ -42,4 +43,5 @@ ax6.set_xlim([0, 24])
 ax6.set_ylim([0, 80])
 
 plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.1, hspace=0.3)
+plt.savefig(arrow.now().isoformat() + '.png')
 plt.show()

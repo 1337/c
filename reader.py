@@ -1,8 +1,8 @@
 # coding=utf-8
 
-import datetime
 from datetime import timedelta
 
+import arrow
 import pandas as pd
 
 from common import clean_voltage, rounded, str_to_date, date_time_to_datetime
@@ -35,9 +35,8 @@ def read_battery_history():
 
 
 def get_last_n_days(*, df, n):
-    n_days_ago = (
-        datetime.datetime.now() - datetime.timedelta(days=n)).date()
-    return df[df.date > n_days_ago]
+    n_days_ago = arrow.now().replace(days=-n).datetime
+    return df[df.datetime > n_days_ago]
 
 
 def get_last_30_days(df):
@@ -155,7 +154,10 @@ class Analyzer(object):
         datapoints = 86400 / 600
         datapoints = max(datapoints, len(day_df))
 
-        frac = (len(day_df[day_df.display == 'on']) / datapoints)
+        base_diff = datapoints - len(day_df)
+        num_on = len(day_df[day_df.display == 'on'])
+
+        frac = (base_diff + num_on) / datapoints
         return rounded(frac * 100)
 
     def screen_on_percent_by_week(self, date):
@@ -175,8 +177,11 @@ class Analyzer(object):
         # If we don't have 144 then obviously something's missing
         datapoints = 86400 / 600 * 7
         datapoints = max(datapoints, len(week_df))
+        
+        base_diff = datapoints - len(week_df)
+        num_on = len(week_df[week_df.display == 'on'])
 
-        frac = (len(week_df[week_df.display == 'on']) / datapoints)
+        frac = (base_diff + num_on) / datapoints
         return rounded(frac * 100)
 
     def by_weekday_and_hour(self, day=None, hour=None):

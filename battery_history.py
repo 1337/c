@@ -17,7 +17,7 @@ def plot(df, canvas):
     canvas.axhline(y=80, linewidth=1, color='r', alpha=0.5)
 
     canvas.legend(loc='upper left')
-    canvas.set_xlabel('Entry index')
+    canvas.set_xlabel('Date')
     canvas.set_ylabel('Battery level (%)')
     canvas.set_title('Battery history')
 
