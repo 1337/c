@@ -177,7 +177,7 @@ class Analyzer(object):
         # If we don't have 144 then obviously something's missing
         datapoints = 86400 / 600 * 7
         datapoints = max(datapoints, len(week_df))
-        
+
         base_diff = datapoints - len(week_df)
         num_on = len(week_df[week_df.display == 'on'])
 
