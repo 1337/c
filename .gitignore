@@ -2,3 +2,4 @@ battery_history.csv
 location_history.txt
 .idea
 __pycache__
+figs/

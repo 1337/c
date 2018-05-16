@@ -14,7 +14,7 @@ def plot(df, canvas):
         df.Voltage,
         s=3,
         c='green',
-        alpha=0.2)
+        alpha=0.1)
     canvas.set_xlabel('Battery percent')
     canvas.set_ylabel('Voltage (V)')
     #canvas.legend(loc='upper left')

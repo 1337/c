@@ -6,30 +6,34 @@ import arrow
 import pandas as pd
 
 from common import clean_voltage, rounded, str_to_date, date_time_to_datetime
+from utils import time_tracker
 
 
 def read_battery_history():
     """Add some processing"""
-    df = pd.read_csv(
-        open('battery_history.csv'),
-        delimiter=',',
-        header=None,  # "csv has no headers"
-        names=['date', 'hour', 'percent', 'display', 'voltage'])
+    with time_tracker('read file lol'):
+        df = pd.read_csv(
+            open('battery_history.csv'),
+            delimiter=',',
+            header=None,  # "csv has no headers"
+            names=['date', 'hour', 'percent', 'display', 'voltage'])
 
     # Map function to column, then put the column back (or another column)
-    df['date'] = df['date'].apply(str_to_date)
-    df['weekday'] = df['date'].apply(lambda x: x.isoweekday() - 1)
-    df['hour'] = df['hour'].apply(float)
-    df['percent'] = df['percent'].apply(int)
-    df['voltage'] = df['voltage'].apply(clean_voltage)
-    df['Voltage'] = df['voltage'].apply(lambda x: x / 1000000)
+    with time_tracker('processing lol'):
+        df['date'] = df['date'].apply(str_to_date)
+        df['weekday'] = df['date'].apply(lambda x: x.isoweekday() - 1)
+        df['hour'] = df['hour'].apply(float)
+        df['percent'] = df['percent'].apply(int)
+        df['voltage'] = df['voltage'].apply(clean_voltage)
+        df['Voltage'] = df['voltage'].apply(lambda x: x / 1000000)
 
-    # Do some maths
-    df['datetime'] = df[['date', 'hour']].apply(date_time_to_datetime, axis=1)
-    df['percent_row_before'] = df['percent'].apply(int).shift(1)
-    df['percent_row_after'] = df['percent'].apply(int).shift(-1)
-    df['percent_7_day_rolling'] = df['percent'].rolling(window=1008).mean()
-    df['percent_30_day_rolling'] = df['percent'].rolling(window=4320).mean()
+    with time_tracker('processing more lol'):
+        # Do some maths
+        df['datetime'] = df[['date', 'hour']].apply(date_time_to_datetime, axis=1)
+        df['percent_row_before'] = df['percent'].apply(int).shift(1)
+        df['percent_row_after'] = df['percent'].apply(int).shift(-1)
+        df['percent_7_day_rolling'] = df['percent'].rolling(window=1008).mean()
+        df['percent_30_day_rolling'] = df['percent'].rolling(window=4320).mean()
 
     return df
 
