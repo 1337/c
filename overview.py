@@ -8,6 +8,7 @@ import percent_cumulative_distribution
 import percent_distribution
 import reader
 import screen_on_week
+import stats
 import time_of_weekday
 import time_of_day
 import voltages
@@ -20,9 +21,9 @@ f, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3, figsize=(16, 9))
 
 with time_tracker('battery history lol'):
     battery_history.plot(df=df, canvas=ax1)
-    ax1.set_xlim([  # "show a week"
-        arrow.now().replace(weeks=-1).datetime,
-        arrow.now().datetime])
+    #ax1.set_xlim([  # "show a week"
+        #arrow.now().replace(days=-3).datetime,
+        #arrow.now().datetime])
     ax1.set_ylim([0, 100])
 
 with time_tracker('voltages lol'):
@@ -51,4 +52,6 @@ with time_tracker('time of weekday lol'):
 
 plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.1, hspace=0.3)
 plt.savefig('figs/' + arrow.now().isoformat() + '.png')
+
+stats.main(df)
 plt.show()
