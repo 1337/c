@@ -21,9 +21,9 @@ f, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2, 3, figsize=(16, 9))
 
 with time_tracker('battery history lol'):
     battery_history.plot(df=df, canvas=ax1)
-    #ax1.set_xlim([  # "show a week"
-        #arrow.now().replace(days=-3).datetime,
-        #arrow.now().datetime])
+    ax1.set_xlim([  # "show a week"
+        arrow.now().replace(days=-7).datetime,
+        arrow.now().datetime])
     ax1.set_ylim([0, 100])
 
 with time_tracker('voltages lol'):
