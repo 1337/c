@@ -5,13 +5,13 @@ from functools import wraps
 
 
 @contextlib.contextmanager
-def time_tracker(name, extra=None):
+def time_tracker(name):
     """Time a block of code in a very simple way with logging statements."""
     start = datetime.now()
     yield
     finish = datetime.now()
     elapsed = (finish - start).total_seconds()
-    print('PROFILER - %f seconds - %s - %s' % (elapsed, name, extra))
+    print('PROFILER - %s - %f seconds' % (name, elapsed))
 
 
 def time_tracked(func, extra=None):

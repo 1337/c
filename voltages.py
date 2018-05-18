@@ -17,15 +17,7 @@ def plot(df, canvas):
         alpha=0.1)
     canvas.set_xlabel('Battery percent')
     canvas.set_ylabel('Voltage (V)')
-    #canvas.legend(loc='upper left')
     canvas.set_title('Battery voltage by capacity')
-
-    # averages = []
-    # for percent in range(100):
-    #     average = df[df.percent == percent].mean()['Voltage']
-    #     averages.append(average)
-    #
-    # canvas.plot(range(100), averages)
 
     # Polynomial trend line
     z = np.polyfit(df.percent, df.Voltage, deg=3)

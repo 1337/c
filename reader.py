@@ -11,12 +11,11 @@ from utils import time_tracker
 
 def read_battery_history():
     """Add some processing"""
-    with time_tracker('read file lol'):
-        df = pd.read_csv(
-            open('battery_history.csv'),
-            delimiter=',',
-            header=None,  # "csv has no headers"
-            names=['date', 'hour', 'percent', 'display', 'voltage'])
+    df = pd.read_csv(
+        open('battery_history.csv'),
+        delimiter=',',
+        header=None,  # "csv has no headers"
+        names=['date', 'hour', 'percent', 'display', 'voltage'])
 
     # Map function to column, then put the column back (or another column)
     with time_tracker('processing lol'):
