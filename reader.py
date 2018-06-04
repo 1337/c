@@ -154,7 +154,7 @@ class Analyzer(object):
         # At a 10-minute collection interval, the number of points
         # collected per day is 144.
         # If we don't have 144 then obviously something's missing
-        datapoints = 86400 / 600
+        datapoints = 0 # 86400 / 600
         datapoints = max(datapoints, len(day_df))
 
         base_diff = datapoints - len(day_df)
@@ -173,7 +173,7 @@ class Analyzer(object):
         # At a 10-minute collection interval, the number of points
         # collected per day is 144.
         # If we don't have 144 then obviously something's missing
-        datapoints = 86400 / 600 * 7
+        datapoints = 0 # 86400 / 600 * 7
         datapoints = max(datapoints, len(week_df))
 
         base_diff = datapoints - len(week_df)
