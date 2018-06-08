@@ -13,11 +13,19 @@ def plot(df, canvas):
         df.percent,
         df.Voltage,
         s=3,
-        c='green',
-        alpha=0.1)
+        c='#cccccc',
+        alpha=0.07)
     canvas.set_xlabel('Battery percent')
     canvas.set_ylabel('Voltage (V)')
     canvas.set_title('Battery voltage by capacity')
+
+    mdf = reader.get_last_7_days(df)
+    canvas.scatter(
+        mdf.percent,
+        mdf.Voltage,
+        s=3,
+        c='green',
+        alpha=0.2)
 
     # Polynomial trend line
     z = np.polyfit(df.percent, df.Voltage, deg=3)
