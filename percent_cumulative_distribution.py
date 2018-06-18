@@ -6,6 +6,9 @@ import reader
 
 
 def plot(df, canvas):
+    canvas.plot([0, 44, 58, 100], [0, 0, 100, 100], label='ideal',
+                color='#cccccc')
+
     values = df.percent.value_counts()
     ys = []
     for idx in range(100):
@@ -33,8 +36,6 @@ def plot(df, canvas):
 
     canvas.legend(loc="upper left")
     canvas.axvline(x=20, linewidth=1, color='r', alpha=0.5)
-    # canvas.axvline(x=44, linewidth=1, color='g')
-    # canvas.axvline(x=58, linewidth=1, color='g')
     canvas.axvline(x=80, linewidth=1, color='r', alpha=0.5)
     canvas.set_xlabel('Battery level (%)')
     canvas.set_ylabel('Cumulative time spent (%)')

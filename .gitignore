@@ -1,4 +1,4 @@
-battery_history.csv
+*.csv
 location_history.txt
 .idea
 __pycache__

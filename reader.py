@@ -1,5 +1,6 @@
 # coding=utf-8
 
+import glob
 from datetime import timedelta
 
 import arrow
@@ -11,11 +12,16 @@ from utils import time_tracker
 
 def read_battery_history():
     """Add some processing"""
-    df = pd.read_csv(
-        open('battery_history.csv'),
-        delimiter=',',
-        header=None,  # "csv has no headers"
-        names=['date', 'hour', 'percent', 'display', 'voltage'])
+    input_files = glob.glob('*.csv')
+    list_ = []
+    for file_ in input_files:
+        df = pd.read_csv(
+            file_,
+            delimiter=',',
+            header=None,  # "csv has no headers"
+            names=['date', 'hour', 'percent', 'display', 'voltage'])
+        list_.append(df)
+    df = pd.concat(list_)
 
     # Map function to column, then put the column back (or another column)
     with time_tracker('processing lol'):
