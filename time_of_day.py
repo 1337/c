@@ -42,19 +42,6 @@ def plot(df, canvas):
                      color='#2ca82a',
                      label='Last 30 days')
 
-    #last_7_days_df = reader.get_last_7_days(df)
-    #last_7_plot = []
-    #for hour in range(24):
-        #val = reader.Analyzer(last_7_days_df) \
-            #.by_weekday_and_hour(hour=hour) \
-            #.screen_on_percent
-        #last_7_plot.append((hour, val))
-
-    #plot_smooth_line(canvas=canvas,
-                     #xys=last_7_plot,
-                     #color='#2ca82a',
-                     #label='Last 7 days')
-
     canvas.legend(loc='upper left')
     canvas.set_xlabel('Time of day (h)')
     canvas.set_ylabel('Probability screen is on (%)')

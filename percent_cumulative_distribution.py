@@ -6,7 +6,7 @@ import reader
 
 
 def plot(df, canvas):
-    canvas.plot([0, 44, 58, 100], [0, 0, 100, 100], label='ideal',
+    canvas.plot([0, 44, 58, 100], [0, 0, 100, 100], label='Ideal',
                 color='#cccccc')
 
     values = df.percent.value_counts()
