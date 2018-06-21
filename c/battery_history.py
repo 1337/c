@@ -2,7 +2,7 @@
 
 import matplotlib.pyplot as plt
 
-import reader
+from .reader import read_battery_history
 
 
 def plot(df, canvas):
@@ -26,5 +26,5 @@ def plot(df, canvas):
 if __name__ == '__main__':
     fig, ax = plt.subplots()
 
-    plot(df=reader.read_battery_history(), canvas=ax)
+    plot(df=read_battery_history(), canvas=ax)
     plt.show()

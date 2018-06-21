@@ -2,8 +2,8 @@
 
 import matplotlib.pyplot as plt
 
-import reader
-from common import smoothed_line
+from .reader import Analyzer, read_battery_history
+from .common import smoothed_line
 
 
 def plot_smooth_line(canvas, xys, points=480, color=None, label=None):
@@ -19,7 +19,7 @@ def plot_smooth_line(canvas, xys, points=480, color=None, label=None):
 def plot(df, canvas):
     day_plot = []
     for hour in range(24):
-        val = reader.Analyzer(df) \
+        val = Analyzer(df) \
             .by_weekday_and_hour([0, 1, 2, 3, 4], hour) \
             .screen_on_percent
         day_plot.append((hour, val))
@@ -28,7 +28,7 @@ def plot(df, canvas):
 
     day_plot = []
     for hour in range(24):
-        val = reader.Analyzer(df) \
+        val = Analyzer(df) \
             .by_weekday_and_hour([5, 6], hour) \
             .screen_on_percent
         day_plot.append((hour, val))
@@ -75,6 +75,6 @@ def plot(df, canvas):
 
 if __name__ == '__main__':
     fig, ax = plt.subplots()
-    df = reader.read_battery_history()
+    df = read_battery_history()
     plot(df=df, canvas=ax)
     plt.show()

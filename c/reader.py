@@ -6,8 +6,8 @@ from datetime import timedelta
 import arrow
 import pandas as pd
 
-from common import clean_voltage, rounded, str_to_date, date_time_to_datetime
-from utils import time_tracker
+from .common import clean_voltage, rounded, str_to_date, date_time_to_datetime
+from .utils import time_tracker
 
 
 def read_battery_history():
@@ -21,6 +21,8 @@ def read_battery_history():
             header=None,  # "csv has no headers"
             names=['date', 'hour', 'percent', 'display', 'voltage'])
         list_.append(df)
+    if not list_:
+        raise IOError('No CSV files found in the working directory.')
     df = pd.concat(list_)
 
     # Map function to column, then put the column back (or another column)

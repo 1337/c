@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-import reader
+from .reader import get_last_7_days, read_battery_history
 
 
 def plot(df, canvas):
@@ -19,7 +19,7 @@ def plot(df, canvas):
     canvas.set_ylabel('Voltage (V)')
     canvas.set_title('Battery voltage by capacity')
 
-    mdf = reader.get_last_7_days(df)
+    mdf = get_last_7_days(df)
     canvas.scatter(
         mdf.percent,
         mdf.Voltage,
@@ -38,5 +38,5 @@ def plot(df, canvas):
 
 if __name__ == '__main__':
     fig, ax = plt.subplots()
-    plot(df=reader.read_battery_history(), canvas=ax)
+    plot(df=read_battery_history(), canvas=ax)
     plt.show()

@@ -3,12 +3,12 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
-import reader
-from common import smoothed_line
+from .reader import Analyzer, read_battery_history
+from .common import smoothed_line
 
 
 def plot(df, canvas):
-    analyzer = reader.Analyzer(df)
+    analyzer = Analyzer(df)
     start = df['date'].min()
     end = df['date'].max()
     index = pd.date_range(start, end, freq='W')
@@ -28,6 +28,6 @@ def plot(df, canvas):
 
 if __name__ == '__main__':
     fig, ax = plt.subplots()
-    df = reader.read_battery_history()
+    df = read_battery_history()
     plot(df=df, canvas=ax)
     plt.show()

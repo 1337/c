@@ -2,4 +2,6 @@
 location_history.txt
 .idea
 __pycache__
+build/
+dist/
 figs/

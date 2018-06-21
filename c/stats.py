@@ -2,8 +2,8 @@
 
 import tabulate
 
-from common import rounded
-import reader
+from .common import rounded
+from .import reader
 
 tabulate.PRESERVE_WHITESPACE = True
 

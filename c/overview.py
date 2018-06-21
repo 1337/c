@@ -3,16 +3,18 @@
 import arrow
 import matplotlib.pyplot as plt
 
-import battery_history
-import percent_cumulative_distribution
-import percent_distribution
-import reader
-import screen_on_week
-import stats
-import time_of_weekday
-import time_of_day
-import voltages
-from utils import time_tracker
+from . import (
+    battery_history,
+    percent_cumulative_distribution,
+    percent_distribution,
+    reader,
+    screen_on_week,
+    stats,
+    time_of_weekday,
+    time_of_day,
+    voltages,
+)
+from c.utils import time_tracker
 
 
 df = reader.read_battery_history()

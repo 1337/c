@@ -2,7 +2,7 @@
 
 import matplotlib.pyplot as plt
 
-import reader
+from .reader import get_last_30_days, read_battery_history
 
 
 def plot(df, canvas):
@@ -21,7 +21,7 @@ def plot(df, canvas):
     ys = [y/max(ys)*100 for y in ys]  # Normalize to 100
     canvas.plot(ys, label='Lifetime')
 
-    last_30_days_df = reader.get_last_30_days(df)
+    last_30_days_df = get_last_30_days(df)
     last_30_values = last_30_days_df.percent.value_counts()
     ys = []
     for idx in range(100):
@@ -44,5 +44,6 @@ def plot(df, canvas):
 
 if __name__ == '__main__':
     fig, ax = plt.subplots()
-    plot(df=reader.read_battery_history(), canvas=ax)
+    plot(df=read_battery_history(), canvas=ax)
     plt.show()
+
