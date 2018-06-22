@@ -17,6 +17,11 @@ setuptools.setup(
     url="https://github.com/1337/c",
     packages=setuptools.find_packages(),
     install_requires=required,
+    entry_points={
+        'console_scripts': [
+            'c=c.cli:main'
+        ],
+    },
     classifiers=(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",

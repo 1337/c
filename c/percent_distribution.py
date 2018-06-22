@@ -44,7 +44,11 @@ def plot(df, canvas, **options):
     canvas.set_title('Battery level frequency')
 
 
-if __name__ == '__main__':
+def main():
     fig, ax = plt.subplots()
     plot(df=read_battery_history(), canvas=ax)
     plt.show()
+
+
+if __name__ == '__main__':
+    main()

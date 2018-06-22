@@ -26,8 +26,12 @@ def plot(df, canvas):
     canvas.set_title('Screen on by week')
 
 
-if __name__ == '__main__':
+def main():
     fig, ax = plt.subplots()
     df = read_battery_history()
     plot(df=df, canvas=ax)
     plt.show()
+
+
+if __name__ == '__main__':
+    main()

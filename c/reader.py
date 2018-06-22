@@ -26,7 +26,7 @@ def read_battery_history():
     df = pd.concat(list_)
 
     # Map function to column, then put the column back (or another column)
-    with time_tracker('processing lol'):
+    with time_tracker('processing'):
         df['date'] = df['date'].apply(str_to_date)
         df['weekday'] = df['date'].apply(lambda x: x.isoweekday() - 1)
         df['hour'] = df['hour'].apply(float)
@@ -34,7 +34,7 @@ def read_battery_history():
         df['voltage'] = df['voltage'].apply(clean_voltage)
         df['Voltage'] = df['voltage'].apply(lambda x: x / 1000000)
 
-    with time_tracker('processing more lol'):
+    with time_tracker('processing more'):
         # Do some maths
         df['datetime'] = df[['date', 'hour']].apply(date_time_to_datetime, axis=1)
         df['percent_row_before'] = df['percent'].shift(1)

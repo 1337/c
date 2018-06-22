@@ -42,8 +42,11 @@ def plot(df, canvas):
     canvas.set_title('Battery percentage cumulative frequency')
 
 
-if __name__ == '__main__':
+def main():
     fig, ax = plt.subplots()
     plot(df=read_battery_history(), canvas=ax)
     plt.show()
 
+
+if __name__ == '__main__':
+    main()

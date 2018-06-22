@@ -14,7 +14,8 @@ def plot(df, canvas):
         df.Voltage,
         s=3,
         c='#cccccc',
-        alpha=0.07)
+        alpha=0.07,
+        label='Lifetime')
     canvas.set_xlabel('Battery percent')
     canvas.set_ylabel('Voltage (V)')
     canvas.set_title('Battery voltage by capacity')
@@ -25,7 +26,8 @@ def plot(df, canvas):
         mdf.Voltage,
         s=3,
         c='green',
-        alpha=0.2)
+        alpha=0.2,
+        label='Last 7 days')
 
     # Polynomial trend line
     z = np.polyfit(df.percent, df.Voltage, deg=3)
@@ -34,9 +36,14 @@ def plot(df, canvas):
     canvas.plot(points, p(points), c='#3bba9c')
 
     canvas.axhline(y=3.92, linewidth=1, color='r', alpha=0.5)
+    canvas.legend(loc="upper left")
 
 
-if __name__ == '__main__':
+def main():
     fig, ax = plt.subplots()
     plot(df=read_battery_history(), canvas=ax)
     plt.show()
+
+
+if __name__ == '__main__':
+    main()

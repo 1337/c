@@ -113,6 +113,10 @@ def main(df):
     print('* Not accurate. If it were then the two values would match.')
 
 
-if __name__ == '__main__':
+def main():
     df = reader.read_battery_history()
     main(df)
+
+
+if __name__ == '__main__':
+    main()
