@@ -8,7 +8,7 @@ from .import reader
 tabulate.PRESERVE_WHITESPACE = True
 
 
-def main(df):
+def chart(df):
     overall_analyzer = reader.Analyzer(df)
 
     last_30_days_df = reader.get_last_30_days(df)
@@ -115,7 +115,7 @@ def main(df):
 
 def main():
     df = reader.read_battery_history()
-    main(df)
+    chart(df)
 
 
 if __name__ == '__main__':

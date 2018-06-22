@@ -28,6 +28,10 @@ To see individual graphs:
 
 ## Changelog
 
+### 0.0.5
+
+Fix command line when handling 'stats'.
+
 ### 0.0.3
 
 Add an actual command line.
