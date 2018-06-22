@@ -154,7 +154,10 @@ class Analyzer(object):
     @property
     def screen_on_percent(self):
         screen_on_df = self.df[self.df.display == 'on']
-        return rounded(len(screen_on_df) / len(self.df) * 100)
+        total_len = len(self.df)
+        if not total_len:
+            return 0.0
+        return rounded(len(screen_on_df) / total_len * 100)
 
     def screen_on_percent_by_weekday(self, weekday):
         day_df = self.df[self.df.weekday == weekday]
@@ -164,6 +167,8 @@ class Analyzer(object):
         # If we don't have 144 then obviously something's missing
         datapoints = 0 # 86400 / 600
         datapoints = max(datapoints, len(day_df))
+        if not datapoints:
+            return 0.0
 
         base_diff = datapoints - len(day_df)
         num_on = len(day_df[day_df.display == 'on'])

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import os
+
 import arrow
 import matplotlib.pyplot as plt
 
@@ -54,7 +56,9 @@ def main():
         ax6.set_ylim([0, 80])
 
     plt.subplots_adjust(left=0.05, right=0.95, top=0.95, bottom=0.1, hspace=0.3)
-    plt.savefig('figs/' + arrow.now().isoformat() + '.png')
+
+    if os.path.exists('figs'):
+        plt.savefig('figs/' + arrow.now().isoformat() + '.png')
 
     stats.chart(df)
     plt.show()
