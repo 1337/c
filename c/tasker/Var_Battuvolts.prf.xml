@@ -1,0 +1,58 @@
+<TaskerData sr="" dvi="1" tv="5.2.bf1">
+	<Profile sr="prof108" ve="2">
+		<cdate>1520393273572</cdate>
+		<clp>true</clp>
+		<edate>1524538702071</edate>
+		<id>108</id>
+		<mid0>114</mid0>
+		<nme>Var Battuvolts</nme>
+		<Time sr="con0">
+			<fh>-1</fh>
+			<fm>-1</fm>
+			<rep>2</rep>
+			<repval>10</repval>
+			<th>-1</th>
+			<tm>-1</tm>
+		</Time>
+	</Profile>
+	<Task sr="task114">
+		<cdate>1520393285225</cdate>
+		<edate>1524538702071</edate>
+		<id>114</id>
+		<nme>Var Battuvolts</nme>
+		<pri>6</pri>
+		<Action sr="act0" ve="7">
+			<code>417</code>
+			<on>false</on>
+			<Str sr="arg0" ve="3">/sys/class/power_supply/battery/cycle_count</Str>
+			<Str sr="arg1" ve="3">%CYCLECOUNT</Str>
+		</Action>
+		<Action sr="act1" ve="7">
+			<code>123</code>
+			<Str sr="arg0" ve="3">cat /sys/class/power_supply/battery/cycle_count</Str>
+			<Int sr="arg1" val="0"/>
+			<Int sr="arg2" val="1"/>
+			<Str sr="arg3" ve="3">%CYCLECOUNT</Str>
+			<Str sr="arg4" ve="3"/>
+			<Str sr="arg5" ve="3"/>
+		</Action>
+		<Action sr="act2" ve="7">
+			<code>123</code>
+			<Str sr="arg0" ve="3">cat /sys/class/power_supply/battery/charge_full_design</Str>
+			<Int sr="arg1" val="0"/>
+			<Int sr="arg2" val="1"/>
+			<Str sr="arg3" ve="3">%CHARGEFULLDESIGN</Str>
+			<Str sr="arg4" ve="3"/>
+			<Str sr="arg5" ve="3"/>
+		</Action>
+		<Action sr="act3" ve="7">
+			<code>123</code>
+			<Str sr="arg0" ve="3">cat /sys/class/power_supply/battery/voltage_now</Str>
+			<Int sr="arg1" val="0"/>
+			<Int sr="arg2" val="1"/>
+			<Str sr="arg3" ve="3">%BATTUVOLTS</Str>
+			<Str sr="arg4" ve="3"/>
+			<Str sr="arg5" ve="3"/>
+		</Action>
+	</Task>
+</TaskerData>

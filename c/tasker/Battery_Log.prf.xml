@@ -1,0 +1,40 @@
+<TaskerData sr="" dvi="1" tv="5.2.bf1">
+	<Profile sr="prof235" ve="2">
+		<cdate>1476974242872</cdate>
+		<clp>true</clp>
+		<edate>1528850935582</edate>
+		<id>235</id>
+		<mid0>236</mid0>
+		<nme>Battery Log</nme>
+		<Time sr="con0">
+			<fh>-1</fh>
+			<fm>-1</fm>
+			<rep>2</rep>
+			<repval>10</repval>
+			<th>-1</th>
+			<tm>-1</tm>
+		</Time>
+	</Profile>
+	<Task sr="task236">
+		<cdate>1476974251764</cdate>
+		<edate>1530143105757</edate>
+		<id>236</id>
+		<nme>Log Battery Level</nme>
+		<pri>6</pri>
+		<Action sr="act0" ve="7">
+			<code>410</code>
+			<Str sr="arg0" ve="3">battery_history.csv</Str>
+			<Str sr="arg1" ve="3">%DATE,%TIME,%BATT,%SCREEN,%BATTUVOLTS</Str>
+			<Int sr="arg2" val="1"/>
+			<Int sr="arg3" val="1"/>
+		</Action>
+		<Action sr="act1" ve="7">
+			<code>547</code>
+			<Str sr="arg0" ve="3">%DISPLAYLAST</Str>
+			<Str sr="arg1" ve="3">%DISPLAY</Str>
+			<Int sr="arg2" val="0"/>
+			<Int sr="arg3" val="0"/>
+			<Int sr="arg4" val="0"/>
+		</Action>
+	</Task>
+</TaskerData>

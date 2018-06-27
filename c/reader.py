@@ -22,7 +22,7 @@ def read_battery_history():
             names=['date', 'hour', 'percent', 'display', 'voltage'])
         list_.append(df)
     if not list_:
-        raise IOError('No CSV files found in the working directory.')
+        raise OSError('No CSV files found in the working directory.')
     df = pd.concat(list_)
 
     # Map function to column, then put the column back (or another column)
