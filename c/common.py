@@ -29,6 +29,14 @@ def clean_voltage(x):
     return 0
 
 
+def clean_capacity(x):
+    try:
+        x = int(x)
+    except (ValueError, TypeError):
+        return None
+    return x
+
+
 def rounded(num):
     return round(num, 2)
 

@@ -18,7 +18,7 @@ To install, type in the terminal:
 There is nothing to configure in this package, but you must configure
 your android device to output CSV files in this format:
 
-    YYYY-MM-DD,HH.mm,!C,!D,!V
+    YYYY-MM-DD,HH.mm,!C,!D,!V,!C2
 
 Special formats are defined as follows:
 
@@ -26,6 +26,7 @@ Special formats are defined as follows:
   0 to 100.
 * `!D`: whether your screen was on at the time, as `on` or `off`.
 * `!V`: the voltage of your battery, in microvolts. `4000000` means 4V.
+* `!C2`: the design capacity of the battery at the time.
 
 The device *must* append a new entry every 10 minutes, specifically,
 whenever the time's minute mod 10 is 0.
@@ -65,6 +66,10 @@ To see just the stats:
       - Sundays                     9.23           2.72          4.11
     ------------------------------  -------------  ------------  ---------
 
+If you are developing:
+
+    $ python -m c.cli
+
 ## Name
 
 C is one of the characters in one of my grandparents' names.
@@ -74,6 +79,10 @@ C is one of the characters in one of my grandparents' names.
 This project is licenSed under the GPL v3 licenSe.
 
 ## Changelog
+
+### 0.1.0
+
+Add a capacity column.
 
 ### 0.0.6
 

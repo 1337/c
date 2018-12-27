@@ -45,7 +45,7 @@ def plot(df, canvas, **options):
 
 
 def main():
-    fig, ax = plt.subplots()
+    _, ax = plt.subplots()
     plot(df=read_battery_history(), canvas=ax)
     plt.show()
 

@@ -6,7 +6,7 @@ from datetime import timedelta
 import arrow
 import pandas as pd
 
-from .common import clean_voltage, rounded, str_to_date, date_time_to_datetime
+from .common import clean_capacity, clean_voltage, rounded, str_to_date, date_time_to_datetime
 from .utils import time_tracker
 
 
@@ -19,7 +19,7 @@ def read_battery_history():
             file_,
             delimiter=',',
             header=None,  # "csv has no headers"
-            names=['date', 'hour', 'percent', 'display', 'voltage'])
+            names=['date', 'hour', 'percent', 'display', 'voltage', 'capacity'])
         list_.append(df)
     if not list_:
         raise OSError('No CSV files found in the working directory.')
@@ -33,6 +33,7 @@ def read_battery_history():
         df['percent'] = df['percent'].apply(int)
         df['voltage'] = df['voltage'].apply(clean_voltage)
         df['Voltage'] = df['voltage'].apply(lambda x: x / 1000000)
+        df['capacity'] = df['capacity'].apply(clean_capacity)
 
     with time_tracker('processing more'):
         # Do some maths

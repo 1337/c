@@ -22,6 +22,16 @@ def plot(df, canvas):
     canvas.set_ylabel('Battery level (%)')
     canvas.set_title('Battery history')
 
+    ax2 = canvas.twinx()
+    ax2.scatter(
+        list(df.datetime.values),
+        df.capacity,
+        s=1,
+        color='#999999',
+        alpha=0.3,
+        label='Capacity')
+    ax2.set_ylabel('Design capacity (mAh)')
+
 
 def main():
     fig, ax = plt.subplots()
